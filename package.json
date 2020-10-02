@@ -4,7 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npm run test:prettier && npm run test:eslint",
+    "start": "node index.js",
+    "test:prettier": "prettier --list-different \"**/*.{graphql,js,css,scss,md}\"",
+    "fix:prettier": "prettier --write \"**/*.{graphql,js,css,scss,md}\"",
+    "fix:eslint": "eslint --fix ./",
+    "test:eslint": "eslint ./ --ext .js --ignore-pattern node_modules/"
   },
   "author": "",
   "license": "ISC",
@@ -15,5 +20,16 @@
     "graphql": "^15.3.0",
     "graphql-tools": "^6.2.4",
     "mongoose": "^5.10.7"
+  },
+  "devDependencies": {
+    "eslint": "^7.2.0",
+    "eslint-config-airbnb": "^18.2.0",
+    "eslint-config-prettier": "^6.12.0",
+    "eslint-plugin-import": "^2.21.2",
+    "eslint-plugin-jsx-a11y": "^6.3.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "eslint-plugin-react": "^7.20.0",
+    "eslint-plugin-react-hooks": "^4.0.0",
+    "prettier": "^2.1.2"
   }
 }

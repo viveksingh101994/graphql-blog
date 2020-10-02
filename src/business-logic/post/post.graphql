@@ -8,10 +8,5 @@ type Post {
 }
 
 type Mutation {
-  addPost(
-    title: String!
-    body: String!
-    published: Boolean
-    authorEmail: String!
-  ): Post
+  addPost(title: String!, body: String!, published: Boolean, authorEmail: String!): Post
 }

@@ -1,21 +1,21 @@
-const application = require("express")();
-const { initConnection } = require("./schema/mongo");
-const { json } = require("body-parser");
-const { graphqlHTTP } = require("express-graphql");
-const { schema } = require("./schema/graphql");
+const application = require('express')();
+const { json } = require('body-parser');
+const { graphqlHTTP } = require('express-graphql');
+const { initConnection } = require('./src/db');
+const { schema } = require('./src/business-logic');
 
 // Middleware
 application.use(json());
 application.use(
-  "/graphql",
+  '/graphql',
   graphqlHTTP({
     schema,
     graphiql: true,
   })
 );
 
-application.get("/", (req, res, next) => {
-  res.send("Express app");
+application.get('/', (req, res) => {
+  res.send('Express app');
 });
 
 // application.use((resData, req, res, next) => {

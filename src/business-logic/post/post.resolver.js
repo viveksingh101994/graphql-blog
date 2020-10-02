@@ -1,26 +1,28 @@
-const { addNewPost, getPosts, getPostById } = require("../../mongo/post");
+const { addNewPost, getPosts, getPostById } = require('./post');
+const { isValidEmail } = require('../../core/utils');
+const { getSingleUser } = require('../user/user');
 
-const post = (parents, args, context, info) => {
+const post = (parents, args) => {
   return getPostById(args.id);
 };
 
-const posts = (parents, args, context, info) => {
+const posts = () => {
   return getPosts({});
 };
 
-const addPost = async (parents, args, context, info) => {
+const addPost = async (parents, args) => {
   const { title, body, published, authorEmail } = args;
   if (!isValidEmail(authorEmail)) {
-    throw new Error("Please enter valid email");
+    throw new Error('Please enter valid email');
   }
   const user = await getSingleUser({ email: authorEmail });
   const newPosts = await addNewPost({
     title,
     body,
     published,
-    author: user.get("id"),
+    author: user.get('id'),
   });
-  user.posts.push(newPosts._id);
+  user.posts.push(newPosts.id);
   await user.save();
   return {
     ...newPosts.toJSON(),
@@ -28,7 +30,7 @@ const addPost = async (parents, args, context, info) => {
   };
 };
 
-const author = (parents, args, context, info) => {
+const author = (parents) => {
   return getSingleUser({ _id: parents.author });
 };
 
