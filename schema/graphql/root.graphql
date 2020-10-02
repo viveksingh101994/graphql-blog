@@ -1,0 +1,6 @@
+type Query {
+  me(email: String!): User!
+  users: [User!]!
+  posts: [Post!]!
+  post(id: ID!): Post
+}
