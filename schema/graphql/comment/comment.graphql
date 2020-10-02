@@ -1,0 +1,10 @@
+type Comment {
+  id: ID!
+  text: String!
+  post: Post!
+  author: User!
+}
+
+type Mutation {
+  addComments(text: String!, postId: String!, authorEmail: String!): Comment
+}

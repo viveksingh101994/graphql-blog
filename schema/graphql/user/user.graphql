@@ -1,0 +1,11 @@
+type User {
+  id: ID!
+  name: String!
+  email: String!
+  post: [Post!]
+  comments: [Comment!]!
+}
+
+type Mutation {
+  addUser(name: String!, email: String!): User!
+}

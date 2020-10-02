@@ -1,15 +1,15 @@
 const application = require("express")();
-const { initConnection } = require("./db");
+const { initConnection } = require("./schema/mongo");
 const { json } = require("body-parser");
 const { graphqlHTTP } = require("express-graphql");
-const { schema, root } = require("./schema/graphql");
+const { schema } = require("./schema/graphql");
 
 // Middleware
 application.use(json());
 application.use(
   "/graphql",
   graphqlHTTP({
-    schema: schema,
+    schema,
     graphiql: true,
   })
 );

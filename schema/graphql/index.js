@@ -1,31 +1,16 @@
-const { GraphQLSchema, GraphQLObjectType } = require("graphql");
-const { users, user, addUser } = require("./user");
-const { posts, post, addPost } = require("./post");
-const { addComments } = require("./comment");
+const { join } = require("path");
+const {
+  makeExecutableSchema,
+  mergeTypeDefs,
+  loadFilesSync,
+  mergeResolvers,
+} = require("graphql-tools");
 
-const rootQuery = new GraphQLObjectType({
-  name: "rootQuery",
-  fields: {
-    users,
-    posts,
-    post,
-    me: user,
-  },
-});
-
-const rootMutation = new GraphQLObjectType({
-  name: "mutation",
-  fields: {
-    addUser,
-    addPost,
-    addComments,
-  },
-});
-
-const schema = new GraphQLSchema({
-  query: rootQuery,
-  mutation: rootMutation,
-});
+const typesArray = loadFilesSync(join(__dirname, "**/*.graphql"));
+const typeDefs = mergeTypeDefs(typesArray, { all: true });
+const resolversArray = loadFilesSync(join(__dirname, "./**/*.resolver.js"));
+const mergedResolvers = mergeResolvers(resolversArray);
+const schema = makeExecutableSchema({ typeDefs, resolvers: mergedResolvers });
 
 module.exports = {
   schema,
