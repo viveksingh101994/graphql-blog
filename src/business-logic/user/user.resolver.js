@@ -1,5 +1,5 @@
-const { getUser, getSingleUser, addNewUser } = require("../../mongo/user");
-const { isValidEmail } = require("../../../core/utils");
+const { getUser, getSingleUser, addNewUser } = require("./user");
+const { isValidEmail } = require("../../core/utils");
 
 const users = (parents, args, context, info) => {
   return getUser({});

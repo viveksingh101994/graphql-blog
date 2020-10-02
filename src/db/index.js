@@ -1,7 +1,4 @@
 const { connect, connection } = require("mongoose");
-require("./comment");
-require("./user");
-require("./post");
 
 const initConnection = () => {
   connect(process.env.DB_CONNECTION_STRING, {

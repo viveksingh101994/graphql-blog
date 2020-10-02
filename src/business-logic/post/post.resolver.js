@@ -1,4 +1,4 @@
-const { addNewPost, getPosts, getPostById } = require("../../mongo/post");
+const { addNewPost, getPosts, getPostById } = require("./post");
 
 const post = (parents, args, context, info) => {
   return getPostById(args.id);

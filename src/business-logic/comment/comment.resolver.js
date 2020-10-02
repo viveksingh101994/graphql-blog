@@ -1,9 +1,9 @@
 const {
   addComments: DBaddComments,
   getSinglePostByCommentId,
-} = require("../../mongo/comment");
-const { getPostById } = require("../../mongo/post");
-const { getUser, getSingleUser } = require("../../mongo/user");
+} = require("./comment");
+const { getPostById } = require("../post/post");
+const { getUser, getSingleUser } = require("../user/user");
 
 const addComments = async (parent, args, context, info) => {
   const postInDB = await getPostById(args.postId);

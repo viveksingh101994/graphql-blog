@@ -1,8 +1,8 @@
 const application = require("express")();
-const { initConnection } = require("./schema/mongo");
+const { initConnection } = require("./src/db");
 const { json } = require("body-parser");
 const { graphqlHTTP } = require("express-graphql");
-const { schema } = require("./schema/graphql");
+const { schema } = require("./src/business-logic");
 
 // Middleware
 application.use(json());
