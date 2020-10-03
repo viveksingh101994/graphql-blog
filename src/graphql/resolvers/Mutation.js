@@ -3,8 +3,7 @@ const { getSingleUser, addNewUser } = require('../../db/queries/user');
 const { addNewPost, getPostById } = require('../../db/queries/post');
 const { addComments: DBaddComments } = require('../../db/queries/comment');
 
-const addPost = async (parents, args) => {
-  const { title, body, published, authorEmail } = args;
+const addPost = async (parents, { title, body, published, authorEmail }, { pubsub }) => {
   if (!isValidEmail(authorEmail)) {
     throw new Error('Please enter valid email');
   }
@@ -17,17 +16,29 @@ const addPost = async (parents, args) => {
   });
   user.posts.push(newPosts.id);
   await user.save();
+  if (published) {
+    pubsub.publish('post', {
+      post: {
+        mutation: 'CREATED',
+        data: { ...newPosts.toJSON() },
+      },
+    });
+  }
   return {
     ...newPosts.toJSON(),
     author: { ...user.toJSON() },
   };
 };
 
-const addComments = async (parent, args) => {
-  const postInDB = await getPostById(args.postId);
-  const user = await getSingleUser({ email: args.authorEmail });
+const addComments = async (parent, { postId, authorEmail, text }, { pubsub }) => {
+  const postInDB = await getPostById(postId);
+  const user = await getSingleUser({ email: authorEmail });
+  if (!postInDB || !user) {
+    return new Error('Unable to find user and post');
+  }
+
   const newComment = await DBaddComments({
-    text: args.text,
+    text,
     post: postInDB.id,
     author: user.id,
   });
@@ -35,6 +46,9 @@ const addComments = async (parent, args) => {
   postInDB.comments.push(newComment.id);
   await postInDB.save();
   await user.save();
+  pubsub.publish(`comment_${postId}`, {
+    comment: { ...newComment.toJSON() },
+  });
   return {
     ...newComment.toJSON(),
     post: postInDB.toJSON(),

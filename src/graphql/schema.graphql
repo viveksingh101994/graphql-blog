@@ -14,6 +14,8 @@ type Mutation {
 
 type Subscription {
   count: Int!
+  comment(postId: ID!): Comment!
+  post: PostSubscriptionPayload!
 }
 
 type Schema {
@@ -44,4 +46,15 @@ type Post {
   published: Boolean!
   author: User!
   comments: [Comment!]
+}
+
+type PostSubscriptionPayload {
+  mutation: MutationType!
+  data: Post!
+}
+
+enum MutationType {
+  CREATED
+  UPDATED
+  DELETED
 }
