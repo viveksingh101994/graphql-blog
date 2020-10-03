@@ -1,8 +1,13 @@
 const { getSingleUser } = require('../../db/queries/user');
+const { Config } = require('../../config');
+const { PrismaQueries } = require('../../prisma');
 
 const Post = {
-  author: (parents) => {
-    return getSingleUser({ _id: parents.author });
+  author: ({ author }) => {
+    if (Config.USE_PRISMA_TOGGLE) {
+      return PrismaQueries.getSingleUser(author);
+    }
+    return getSingleUser({ _id: author });
   },
 };
 

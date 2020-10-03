@@ -13,7 +13,8 @@
       "env": {
         "DB_CONNECTION_STRING": "mongodb://localhost/comment-graphql",
         "PORT": 9090,
-        "WS_PORT": 9091
+        "WS_PORT": 9091,
+        "USE_PRISMA_TOGGLE": "true"
       }
     }
   ]

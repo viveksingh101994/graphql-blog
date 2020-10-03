@@ -1,7 +1,8 @@
 const { connect, connection } = require('mongoose');
+const { Config } = require('../config');
 
 const initConnection = () => {
-  connect(process.env.DB_CONNECTION_STRING, {
+  connect(Config.DB_CONNECTION_STRING, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,
