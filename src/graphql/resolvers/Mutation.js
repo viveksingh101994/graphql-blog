@@ -1,11 +1,18 @@
+const { Config } = require('../../config');
 const { isValidEmail } = require('../../core/utils');
 const { getSingleUser, addNewUser } = require('../../db/queries/user');
 const { addNewPost, getPostById } = require('../../db/queries/post');
 const { addComments: DBaddComments } = require('../../db/queries/comment');
+const { PrismaQueries } = require('../../prisma');
 
 const addPost = async (parents, { title, body, published, authorEmail }, { pubsub }) => {
   if (!isValidEmail(authorEmail)) {
     throw new Error('Please enter valid email');
+  }
+  if (Config.USE_PRISMA_TOGGLE) {
+    return PrismaQueries.addPost({ title, body, published, authorEmail }).catch((err) => {
+      console.log(err);
+    });
   }
   const user = await getSingleUser({ email: authorEmail });
   const newPosts = await addNewPost({
@@ -56,10 +63,15 @@ const addComments = async (parent, { postId, authorEmail, text }, { pubsub }) =>
   };
 };
 
-const addUser = async (parents, args) => {
-  const { name, email } = args;
+const addUser = async (parents, { name, email }) => {
   if (!isValidEmail(email)) {
     throw new Error('Please enter valid Email');
+  }
+  if (Config.USE_PRISMA_TOGGLE) {
+    return PrismaQueries.addUser({ name, email }).catch((err) => {
+      console.log(err);
+      throw new Error('Please enter valid Email');
+    });
   }
   const isUser = await getSingleUser({ email });
   if (isUser) {
