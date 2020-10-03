@@ -14,6 +14,7 @@ connection
   })
   .on('error', (err) => {
     console.log(`Error in db`, err);
+    process.exit(1);
   });
 
 module.exports = {

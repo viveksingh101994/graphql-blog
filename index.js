@@ -1,33 +1,21 @@
-const application = require('express')();
-const { json } = require('body-parser');
-const { graphqlHTTP } = require('express-graphql');
+const { GraphQLServer, PubSub } = require('graphql-yoga');
+const { resolvers } = require('./src/graphql');
 const { initConnection } = require('./src/db');
-const { schema } = require('./src/business-logic');
 
-// Middleware
-application.use(json());
-application.use(
-  '/graphql',
-  graphqlHTTP({
-    schema,
-    graphiql: true,
+const pubsub = new PubSub();
+const server = new GraphQLServer({
+  typeDefs: './src/graphql/schema.graphql',
+  resolvers,
+  context: { pubsub },
+});
+server
+  .start({
+    port: 4000,
+    endpoint: '/graphql',
+    subscriptions: '/subscriptions',
+    playground: '/playground',
   })
-);
-
-application.get('/', (req, res) => {
-  res.send('Express app');
-});
-
-// application.use((resData, req, res, next) => {
-//   res.locals = resData;
-//   next();
-// });
-
-// application.use((req, res, next) => {
-//   res.json(res.locals.message);
-// });
-
-application.listen(process.env.PORT, () => {
-  initConnection();
-  console.log(`listening on port ${process.env.PORT}`);
-});
+  .then(() => {
+    initConnection();
+    console.log('Server is running on localhost:4000');
+  });

@@ -12,7 +12,8 @@
       "program": "${workspaceFolder}\\index.js",
       "env": {
         "DB_CONNECTION_STRING": "mongodb://localhost/comment-graphql",
-        "PORT": 9090
+        "PORT": 9090,
+        "WS_PORT": 9091
       }
     }
   ]

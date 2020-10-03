@@ -35,7 +35,12 @@ const getSinglePostByCommentId = async (id) => {
   return comment.findById(id).populate('post');
 };
 
+const getComments = (query) => {
+  return comment.find(query);
+};
+
 module.exports = {
   addComments,
   getSinglePostByCommentId,
+  getComments,
 };
